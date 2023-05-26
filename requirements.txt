@@ -1,0 +1,7 @@
+pandas
+streamlit
+streamlit-extras
+snowflake-sqlalchemy
+python-dotenv
+sqlalchemy<2.0
+snowflake-connector-python
