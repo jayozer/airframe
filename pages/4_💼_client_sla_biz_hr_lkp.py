@@ -27,6 +27,7 @@ role=os.getenv('SNOWFLAKE_ROLE')
 streamlit_user=os.getenv('STREAMLIT_USERNAME') # Ultimately this will be populated by an user account from AD.
 
 #read from snowflake. Select the table and schema according to the sidebar radio button choice for sheets.
+@st.cache_data
 def read_from_snowflake_table(table, schema, user, password, account, warehouse, database):
     engine = create_engine('snowflake://{user}:{password}@{account_identifier}/?role={role}&warehouse={warehouse}'.format(
     user=user,
@@ -34,8 +35,9 @@ def read_from_snowflake_table(table, schema, user, password, account, warehouse,
     account_identifier=account,
     role=role,
     warehouse=warehouse,
-    database=database,
-    pool_pre_ping=True)
+    database=database
+    # pool_pre_ping=True --removing it right now. Will check again but wont run multiple tables at the same time.
+    )
     )
     # use pandas DataFrame's read_sql method to query data from Snowflake
     df = pd.read_sql(f'SELECT * FROM {schema}.{table}', engine)
@@ -44,7 +46,7 @@ def read_from_snowflake_table(table, schema, user, password, account, warehouse,
 # read the current table from snowflake
 project_map_df=read_from_snowflake_table(table, schema, user, password, account, warehouse, database)
 # Assign the df to editable experimental data editor
-project_map = st.experimental_data_editor(
+project_map = st.data_editor(
     data=project_map_df,
     width=None,
     height=None,
