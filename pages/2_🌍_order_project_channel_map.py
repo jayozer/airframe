@@ -44,7 +44,7 @@ def read_from_snowflake_table(table, schema, user, password, account, warehouse,
 # read the current table from snowflake
 project_map_df=read_from_snowflake_table(table, schema, user, password, account, warehouse, database)
 # Assign the df to editable experimental data editor
-project_map = st.experimental_data_editor(
+project_map = st.data_editor(
     data=project_map_df,
     width=None,
     height=None,
